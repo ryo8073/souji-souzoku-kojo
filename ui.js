@@ -32,6 +32,49 @@ const DEFAULT_MULTI_HEIRS = [
   { relationship: '祖母', category: '法定外', amount: 20000000, deduction: 0 },
 ];
 
+function renderMultiHeirsTable(heirs, isCalculated = false) {
+  const container = getElement('multi-heirs-table');
+  if (!container) return;
+
+  const tbody = getElement('multi-heirs-tbody');
+  if (!tbody) return;
+
+  const rows = heirs.map((heir, index) => `
+    <tr>
+      <td>
+        <select class="form-input text-sm" data-multi-heir-index="${index}" data-multi-heir-field="relationship">
+          ${RELATIONSHIP_OPTIONS.map(option => 
+            `<option value="${option}" ${heir.relationship === option ? 'selected' : ''}>${option}</option>`
+          ).join('')}
+        </select>
+      </td>
+      <td>
+        <select class="form-input text-sm" data-multi-heir-index="${index}" data-multi-heir-field="category">
+          ${CATEGORY_OPTIONS.map(option => 
+            `<option value="${option}" ${heir.category === option ? 'selected' : ''}>${option}</option>`
+          ).join('')}
+        </select>
+      </td>
+      <td>
+        <input type="text" class="form-input text-sm amount-cell" data-multi-heir-index="${index}" data-multi-heir-field="amount" 
+               value="${heir.amount.toLocaleString('ja-JP')}" ${isCalculated ? 'readonly' : ''}>
+      </td>
+      <td>
+        <input type="text" class="form-input text-sm amount-cell" data-multi-heir-index="${index}" data-multi-heir-field="deduction" 
+               value="${heir.deduction.toLocaleString('ja-JP')}" readonly>
+      </td>
+      <td>
+        <span class="reason-cell ${heir.deduction === 0 ? 'zero-reason' : ''}">${heir.reason || ''}</span>
+      </td>
+      <td>
+        <button type="button" class="remove-btn btn btn-sm btn-outline" data-multi-heir-action="remove" data-multi-heir-index="${index}">削除</button>
+      </td>
+    </tr>
+  `).join('');
+
+  tbody.innerHTML = rows;
+}
+
 window.UI = {
   renderInputField(field, value, extra = {}) {
     const container = getElement(field.id);
@@ -289,32 +332,32 @@ window.UI = {
     const rows = heirs.map((heir, index) => `
       <tr>
         <td>
-          <select class="form-input text-sm" data-index="${index}" data-field="relationship">
+          <select class="form-input text-sm" data-multi-heir-index="${index}" data-multi-heir-field="relationship">
             ${RELATIONSHIP_OPTIONS.map(option => 
               `<option value="${option}" ${heir.relationship === option ? 'selected' : ''}>${option}</option>`
             ).join('')}
           </select>
         </td>
         <td>
-          <select class="form-input text-sm" data-index="${index}" data-field="category">
+          <select class="form-input text-sm" data-multi-heir-index="${index}" data-multi-heir-field="category">
             ${CATEGORY_OPTIONS.map(option => 
               `<option value="${option}" ${heir.category === option ? 'selected' : ''}>${option}</option>`
             ).join('')}
           </select>
         </td>
         <td>
-          <input type="text" class="form-input text-sm amount-cell" data-index="${index}" data-field="amount" 
+          <input type="text" class="form-input text-sm amount-cell" data-multi-heir-index="${index}" data-multi-heir-field="amount" 
                  value="${heir.amount.toLocaleString('ja-JP')}" ${isCalculated ? 'readonly' : ''}>
         </td>
         <td>
-          <input type="text" class="form-input text-sm amount-cell" data-index="${index}" data-field="deduction" 
+          <input type="text" class="form-input text-sm amount-cell" data-multi-heir-index="${index}" data-multi-heir-field="deduction" 
                  value="${heir.deduction.toLocaleString('ja-JP')}" readonly>
         </td>
         <td>
           <span class="reason-cell ${heir.deduction === 0 ? 'zero-reason' : ''}">${heir.reason || ''}</span>
         </td>
         <td>
-          <button type="button" class="remove-btn btn btn-sm btn-outline" data-index="${index}">削除</button>
+          <button type="button" class="remove-btn btn btn-sm btn-outline" data-multi-heir-action="remove" data-multi-heir-index="${index}">削除</button>
         </td>
       </tr>
     `).join('');
@@ -322,3 +365,4 @@ window.UI = {
     tbody.innerHTML = rows;
   }
 };
+window.renderMultiHeirsTable = renderMultiHeirsTable;

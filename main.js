@@ -397,6 +397,7 @@ window.App = class {
       // D説明を表示
       const dDesc = document.getElementById('desc-D');
       if (dDesc) dDesc.classList.remove('hidden');
+      this.render();
     });
 
     // 初期化
