@@ -3,7 +3,8 @@ import { INPUT_DEFINITIONS, HEIRS, heirIsSelectable, DEFAULT_MULTI_HEIRS } from 
 import * as ui from './ui.js';
 import { Calculator } from './calculator.js';
 
-class App {
+// グローバル変数としてAppクラスを定義
+window.App = class {
   constructor() {
     this.inputValues = {};
     this.selectedHeirId = 'heir-spouse';
@@ -77,7 +78,7 @@ class App {
     const select = document.getElementById('single-heir-select');
     if (!select) return;
     select.innerHTML = '';
-    HEIRS.forEach(heir => {
+    window.HEIRS.forEach(heir => {
       const option = document.createElement('option');
       option.value = heir.id;
       option.textContent = heir.name;
@@ -102,7 +103,7 @@ class App {
     const heirButton = target.closest('[data-heir-id]');
     if (heirButton) {
       const heirId = heirButton.dataset.heirId;
-      if (heirIsSelectable(heirId) && this.selectedHeirId !== heirId) {
+      if (window.heirIsSelectable(heirId) && this.selectedHeirId !== heirId) {
         this.selectedHeirId = heirId;
         this.hasCalculated = false;
         this.inputValues = {}; // 切り替え時はリセット
@@ -151,7 +152,7 @@ class App {
       }
     }
     const value = input.value.replace(/,/g, '');
-    if (INPUT_DEFINITIONS[key]?.unit === '円' && value !== '') {
+    if (window.INPUT_DEFINITIONS[key]?.unit === '円' && value !== '') {
       if (!isNaN(value)) {
         input.value = parseInt(value, 10).toLocaleString('ja-JP');
       }
@@ -190,8 +191,8 @@ class App {
   }
 
   render() {
-    const selectedHeir = HEIRS.find(h => h.id === this.selectedHeirId);
-    Object.values(INPUT_DEFINITIONS).forEach(field => {
+    const selectedHeir = window.HEIRS.find(h => h.id === this.selectedHeirId);
+    Object.values(window.INPUT_DEFINITIONS).forEach(field => {
       let value = (this.inputValues[field.key] !== undefined)
         ? this.inputValues[field.key]
         : (selectedHeir ? selectedHeir.values[field.key] : 0);
@@ -199,7 +200,7 @@ class App {
       if (field.type === 'date-dropdown') {
         extra = { inputValues: this.inputValues };
       }
-      ui.renderInputField(field, value, extra);
+      window.UI.renderInputField(field, value, extra);
     });
     if (selectedHeir) {
       const method = (this.inputValues.E_METHOD !== undefined)
@@ -241,7 +242,7 @@ class App {
     }
     const eField = document.getElementById('input-E');
     if (eField) {
-      ui.renderInputField({
+      window.UI.renderInputField({
         key: 'E',
         id: 'input-E',
         label: '経過年数',
@@ -267,13 +268,13 @@ class App {
       return;
     }
     console.log('calculate() called');
-    ui.setLoading(true);
+    window.UI.setLoading(true);
     const values = {};
-    Object.keys(INPUT_DEFINITIONS).forEach(key => {
-      const definition = INPUT_DEFINITIONS[key];
+    Object.keys(window.INPUT_DEFINITIONS).forEach(key => {
+      const definition = window.INPUT_DEFINITIONS[key];
       let v = (this.inputValues[key] !== undefined) ? this.inputValues[key] : undefined;
       if (v === undefined) {
-        const selectedHeir = HEIRS.find(h => h.id === this.selectedHeirId);
+        const selectedHeir = window.HEIRS.find(h => h.id === this.selectedHeirId);
         v = selectedHeir ? selectedHeir.values[key] : (definition.type === 'date' ? '' : 0);
       }
       if (definition.type === 'date') {
@@ -288,7 +289,7 @@ class App {
     console.log('Input values:', values);
 
     // 選択相続人の区分を判定
-    const selectedHeir = HEIRS.find(h => h.id === this.selectedHeirId);
+    const selectedHeir = window.HEIRS.find(h => h.id === this.selectedHeirId);
     let category = '法定相続人';
     if (selectedHeir && selectedHeir.values && selectedHeir.values.category) {
       category = selectedHeir.values.category;
@@ -307,8 +308,8 @@ class App {
     }
     if (reason) {
       setTimeout(() => {
-        ui.updateResult({ finalAmount: 0, steps: [{ title: category, calculation: '', result: reason }] });
-        ui.setLoading(false);
+        window.UI.updateResult({ finalAmount: 0, steps: [{ title: category, calculation: '', result: reason }] });
+        window.UI.setLoading(false);
       }, 400);
       return;
     }
@@ -343,11 +344,11 @@ class App {
       values.E = 0;
     }
     console.log('Final values for calculation:', values);
-    const result = Calculator.calculateDeduction(values);
+    const result = window.Calculator.calculateDeduction(values);
     console.log('Calculation result:', result);
     setTimeout(() => {
-      ui.updateResult(result);
-      ui.setLoading(false);
+      window.UI.updateResult(result);
+      window.UI.setLoading(false);
     }, 400);
   }
 
@@ -388,7 +389,7 @@ class App {
     multiBtn.addEventListener('click', () => {
       singleBtn.setAttribute('aria-pressed', 'false');
       multiBtn.setAttribute('aria-pressed', 'true');
-      this.multiHeirs = JSON.parse(JSON.stringify(DEFAULT_MULTI_HEIRS));
+      this.multiHeirs = JSON.parse(JSON.stringify(window.DEFAULT_MULTI_HEIRS));
       window.renderMultiHeirsTable(this.multiHeirs);
       multiTable.classList.remove('hidden');
       singleHeirSelectRow.classList.add('hidden');
@@ -402,7 +403,7 @@ class App {
 
     // 初期化
     if (multiBtn.getAttribute('aria-pressed') === 'true') {
-      this.multiHeirs = JSON.parse(JSON.stringify(DEFAULT_MULTI_HEIRS));
+      this.multiHeirs = JSON.parse(JSON.stringify(window.DEFAULT_MULTI_HEIRS));
       window.renderMultiHeirsTable(this.multiHeirs);
       multiTable.classList.remove('hidden');
       singleHeirSelectRow.classList.add('hidden');
@@ -536,19 +537,19 @@ class App {
         const values = { ...baseValues, D: amount };
         // 強制的にEをthis.inputValues.Eで上書き
         values.E = this.inputValues.E;
-        const result = Calculator.calculateDeduction(values);
+        const result = window.Calculator.calculateDeduction(values);
         h.deduction = isNaN(result.finalAmount) ? 0 : Math.floor(result.finalAmount);
         h.deductionReason = undefined;
         // 一番上の人だけ詳細計算過程を表示
         if (i === 0) {
-          ui.updateResult(result);
+          window.UI.updateResult(result);
         }
       } else {
         h.deduction = 0;
         h.deductionReason = reason;
         // 一番上の人が法定相続人以外なら理由を計算根拠に表示
         if (i === 0) {
-          ui.updateResult({ finalAmount: 0, steps: [{ title: h.category, calculation: '', result: reason }] });
+          window.UI.updateResult({ finalAmount: 0, steps: [{ title: h.category, calculation: '', result: reason }] });
         }
       }
     });
@@ -559,17 +560,17 @@ class App {
   getBaseInputValues() {
     // 入力欄からA,B,C,Eなどを取得
     const values = {};
-    Object.keys(INPUT_DEFINITIONS).forEach(key => {
+    Object.keys(window.INPUT_DEFINITIONS).forEach(key => {
       if (key === 'D') return;
       if (key === 'E') {
         values.E = (this.inputValues.E !== undefined) ? this.inputValues.E : 0;
         return;
       }
       // 複数人計算時はselectedHeirId/selectedHeirを参照しない
-      let v = (this.inputValues[key] !== undefined) ? this.inputValues[key] : (INPUT_DEFINITIONS[key].type === 'date' ? '' : 0);
-      if (INPUT_DEFINITIONS[key].type === 'date') {
+      let v = (this.inputValues[key] !== undefined) ? this.inputValues[key] : (window.INPUT_DEFINITIONS[key].type === 'date' ? '' : 0);
+      if (window.INPUT_DEFINITIONS[key].type === 'date') {
         values[key] = v;
-      } else if (INPUT_DEFINITIONS[key].type === 'select') {
+      } else if (window.INPUT_DEFINITIONS[key].type === 'select') {
         values[key] = v;
       } else {
         const rawValue = (typeof v === 'string') ? v.replace(/,/g, '') : v;
@@ -580,17 +581,15 @@ class App {
   }
 
   toggleTheme() {
-    const isDark = document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    lucide.createIcons();
+    document.documentElement.classList.toggle('dark');
   }
 
   getInputValuesFromForm() {
     // input, select要素から値を取得しinputValuesを返す
     const values = {};
-    Object.keys(INPUT_DEFINITIONS).forEach(key => {
+    Object.keys(window.INPUT_DEFINITIONS).forEach(key => {
       if (key === 'D') return;
-      const el = document.getElementById(`${INPUT_DEFINITIONS[key].id}-input`);
+      const el = document.getElementById(`${window.INPUT_DEFINITIONS[key].id}-input`);
       if (el) {
         if (el.type === 'checkbox') {
           values[key] = el.checked;
@@ -604,7 +603,7 @@ class App {
         values[key] = this.inputValues[key] !== undefined ? this.inputValues[key] : '';
       }
       if (["A","B","C","E_METHOD","E_YEARS"].includes(key)) {
-        console.log(`[DEBUG getInputValuesFromForm] key=${key}, id=${INPUT_DEFINITIONS[key].id}-input, value=`, values[key]);
+        console.log(`[DEBUG getInputValuesFromForm] key=${key}, id=${window.INPUT_DEFINITIONS[key].id}-input, value=`, values[key]);
       }
     });
     // E1/E2系も必ず取得
@@ -618,7 +617,7 @@ class App {
     });
     return values;
   }
-}
+};
 
 // Initial theme setup
 if (localStorage.getItem('theme') === 'dark' || 
@@ -629,5 +628,5 @@ if (localStorage.getItem('theme') === 'dark' ||
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new App();
+    window.app = new window.App();
 }); 

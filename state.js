@@ -1,5 +1,5 @@
-import { templates } from './templates.js';
-import { Calculator } from './calculator.js';
+// グローバル変数としてtemplatesを定義
+const templates = window.templates || [];
 
 function createStore(initialState) {
     let state = initialState;
@@ -69,7 +69,7 @@ function createStore(initialState) {
 
     function calculate() {
         try {
-            const result = Calculator.calculateDeduction(proxy.formValues);
+            const result = window.Calculator.calculateDeduction(proxy.formValues);
             proxy.calculationResult = result;
         } catch (error) {
             console.error(`Calculation failed: ${error.message}`);
@@ -90,11 +90,11 @@ function createStore(initialState) {
 
 // --- Initial State Setup ---
 const defaultTemplate = templates.find(t => t.default) || templates[0];
-const defaultHeir = defaultTemplate.heirs?.[0];
+const defaultHeir = defaultTemplate?.heirs?.[0];
 
 const initialState = {
-    currentTemplateId: defaultTemplate.id,
-    currentHeirs: defaultTemplate.heirs,
+    currentTemplateId: defaultTemplate?.id || 'default',
+    currentHeirs: defaultTemplate?.heirs || [],
     selectedHeirId: defaultHeir?.id || null,
     formValues: defaultHeir ? {
         A: defaultHeir.A,
@@ -104,8 +104,9 @@ const initialState = {
         E: defaultHeir.E,
     } : { A: 0, B: 0, C: 0, D: 0, E: 0 },
     calculationResult: null,
-    familyTreeNodes: defaultTemplate.nodes,
-    familyTreeEdges: defaultTemplate.edges,
+    familyTreeNodes: defaultTemplate?.nodes || [],
+    familyTreeEdges: defaultTemplate?.edges || [],
 };
 
-export const store = createStore(initialState); 
+// グローバル変数としてエクスポート
+window.store = createStore(initialState); 

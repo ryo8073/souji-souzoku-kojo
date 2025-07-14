@@ -5,7 +5,7 @@
  * screen reader announcements.
  * @module Accessibility
  */
-export class AccessibilityManager {
+window.AccessibilityManager = class {
 	constructor() {
 		this.announcer = document.createElement('div');
 		this.announcer.id = 'announcer';
@@ -24,4 +24,4 @@ export class AccessibilityManager {
 			this.announcer.textContent = message;
 		}
 	}
-}
+};

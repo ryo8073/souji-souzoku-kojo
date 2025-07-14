@@ -6,7 +6,7 @@
  * @module Validation
  */
 
-export class Validator {
+window.Validator = class {
 	constructor(rules) {
 		this.rules = rules;
 	}
@@ -43,14 +43,14 @@ export class Validator {
 		}
 		return errors;
 	}
-}
+};
 
 /**
  * 入力値を検証する
  * @param {object} inputs - 入力値オブジェクト { A, B, C, D, E }
  * @returns {string[]} エラーメッセージの配列
  */
-export function validateInputs(inputs) {
+window.validateInputs = function(inputs) {
 	const errors = [];
 	const { A, B, C, D, E } = inputs;
 
@@ -71,4 +71,4 @@ export function validateInputs(inputs) {
 	}
 
 	return errors;
-}
+};

@@ -1,4 +1,5 @@
-export const INPUT_DEFINITIONS = {
+// グローバル変数として定義
+window.INPUT_DEFINITIONS = {
   A: {
     key: 'A',
     id: 'input-A',
@@ -85,7 +86,7 @@ export const INPUT_DEFINITIONS = {
   }
 };
 
-export const HEIRS = [
+window.HEIRS = [
   { 
     id: 'heir-spouse', 
     name: '配偶者', 
@@ -160,13 +161,13 @@ export const HEIRS = [
   },
 ];
 
-export function heirIsSelectable(heirId) {
-  const heir = HEIRS.find(h => h.id === heirId);
+window.heirIsSelectable = function(heirId) {
+  const heir = window.HEIRS.find(h => h.id === heirId);
   return heir ? heir.isSelectable !== false : false;
-}
+};
 
 // 初期事例データ
-export const DEFAULT_MULTI_HEIRS = [
+window.DEFAULT_MULTI_HEIRS = [
   { relationship: '配偶者', category: '法定相続人', amount: 250000000, deduction: 0 },
   { relationship: '長男', category: '法定相続人', amount: 100000000, deduction: 0 },
   { relationship: '次男', category: '法定相続人', amount: 65000000, deduction: 0 },

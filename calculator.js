@@ -13,24 +13,24 @@
  * A static utility class for calculating the successive inheritance tax deduction.
  * このクラスは状態を持たず、計算機能のみを提供します。
  */
-export class Calculator {
+window.Calculator = {
 	/**
 	 * 小数点以下を指定桁数で切り捨てるヘルパー関数
 	 * @param {number} num - 対象の数値
 	 * @param {number} places - 残す小数点以下の桁数
 	 * @returns {number} - 切り捨て後の数値
 	 */
-	static _truncate(num, places) {
+	_truncate(num, places) {
 		const power = Math.pow(10, places);
 		return Math.floor(num * power) / power;
-	}
+	},
 
 	/**
 	 * 相次相続控除額を計算する
 	 * @param {object} values - 入力値オブジェクト { A, B, C, D, E }
 	 * @returns {object} - { finalAmount, steps, formula }
 	 */
-	static calculateDeduction(values) {
+	calculateDeduction(values) {
 		const { A, B, C, D, E } = values;
 
 		if (B - A <= 0) {
@@ -123,4 +123,4 @@ export class Calculator {
 			formula,
 		};
 	}
-}
+};
