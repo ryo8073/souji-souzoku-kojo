@@ -69,6 +69,7 @@ window.App = class {
     this.setupAutoFocus();
     this.render();
     this.setupCalcModeToggle();
+    this.setupFamilyTreeModal();
   }
 
   populateSingleHeirSelect() {
@@ -613,6 +614,55 @@ window.App = class {
       }
     });
     return values;
+  }
+
+  // 家系図モーダル機能
+  setupFamilyTreeModal() {
+    const familyTreeImage = document.getElementById('family-tree-image');
+    const familyTreePlaceholder = document.getElementById('family-tree-placeholder');
+    const modal = document.getElementById('family-tree-modal');
+    const closeButton = document.getElementById('close-family-tree-modal');
+
+    // 家系図クリックでモーダルを開く
+    const openModal = () => {
+      modal.classList.remove('hidden');
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden'; // スクロール防止
+    };
+
+    // モーダルを閉じる
+    const closeModal = () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('show');
+      document.body.style.overflow = ''; // スクロール復活
+    };
+
+    // イベントリスナーを設定
+    if (familyTreeImage) {
+      familyTreeImage.addEventListener('click', openModal);
+    }
+    if (familyTreePlaceholder) {
+      familyTreePlaceholder.addEventListener('click', openModal);
+    }
+    if (closeButton) {
+      closeButton.addEventListener('click', closeModal);
+    }
+
+    // モーダル背景クリックで閉じる
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+    }
+
+    // ESCキーでモーダルを閉じる
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
   }
 };
 
