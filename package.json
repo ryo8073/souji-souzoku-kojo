@@ -1,0 +1,38 @@
+{
+  "name": "souji-souzoku0.6",
+  "version": "1.0.0",
+  "description": "**世界クラスの相続税計算アプリケーション** - 2025年最新のUI/UXとアクセシビリティを備えた相次相続控除計算ツール",
+  "main": "main.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .js",
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.32.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "vite": "^5.4.19",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "@types/d3": "^7.4.3",
+    "@types/dagre": "^0.7.52",
+    "d3": "^7.9.0",
+    "dagre": "^0.8.5",
+    "tailwindcss": "^4.1.11"
+  }
+}
