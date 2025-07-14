@@ -1,9 +1,6 @@
-import './style.css';
-import { INPUT_DEFINITIONS, HEIRS, heirIsSelectable, DEFAULT_MULTI_HEIRS } from './config.js';
-import * as ui from './ui.js';
-import { Calculator } from './calculator.js';
+// 依存はwindow.XXXで参照
+// 例: window.INPUT_DEFINITIONS, window.HEIRS, window.UI, window.Calculator など
 
-// グローバル変数としてAppクラスを定義
 window.App = class {
   constructor() {
     this.inputValues = {};
@@ -628,5 +625,5 @@ if (localStorage.getItem('theme') === 'dark' ||
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    window.app = new window.App();
+  window.app = new window.App();
 }); 
