@@ -15,7 +15,12 @@
     <meta property="og:url" content="https://your-domain.com">
     
     <title>相次相続控除額 計算シミュレーター</title>
-    <script type="module" src="/main.js" defer></script>
+    
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
     
     <!-- 2025年最新のデザインシステム -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -31,6 +36,7 @@
     <!-- パフォーマンス最適化 -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//unpkg.com">
+    <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 antialiased dark:bg-slate-900 dark:text-slate-200">
 
@@ -225,6 +231,16 @@
       </div>
     </main>
   </div>
+  
+  <!-- JavaScript -->
+  <script src="main.js"></script>
+  <script src="ui.js"></script>
+  <script src="calculator.js"></script>
+  <script src="state.js"></script>
+  <script src="validation.js"></script>
+  <script src="utils.js"></script>
+  <script src="accessibility.js"></script>
+  <script src="config.js"></script>
   
   <script>
     lucide.createIcons();
