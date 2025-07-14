@@ -9,6 +9,18 @@ export default defineConfig({
     tailwindcss(),
   ],
   build: {
-    target: 'esnext'
+    target: 'esnext',
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
+    minify: 'terser',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
+  },
+  preview: {
+    port: 8000
   }
 }); 
