@@ -64,7 +64,7 @@ function renderMultiHeirsTable(heirs, isCalculated = false) {
                value="${heir.deduction.toLocaleString('ja-JP')}" readonly>
       </td>
       <td>
-        <span class="reason-cell ${heir.deduction === 0 ? 'zero-reason' : ''}">${heir.reason || ''}</span>
+        <span class="reason-cell ${heir.deduction === 0 ? 'zero-reason' : ''}">${heir.deductionReason || ''}</span>
       </td>
       <td>
         <button type="button" class="remove-btn btn btn-sm btn-outline" data-multi-heir-action="remove" data-multi-heir-index="${index}">削除</button>
@@ -354,7 +354,7 @@ window.UI = {
                  value="${heir.deduction.toLocaleString('ja-JP')}" readonly>
         </td>
         <td>
-          <span class="reason-cell ${heir.deduction === 0 ? 'zero-reason' : ''}">${heir.reason || ''}</span>
+          <span class="reason-cell ${heir.deduction === 0 ? 'zero-reason' : ''}">${heir.deductionReason || ''}</span>
         </td>
         <td>
           <button type="button" class="remove-btn btn btn-sm btn-outline" data-multi-heir-action="remove" data-multi-heir-index="${index}">削除</button>
